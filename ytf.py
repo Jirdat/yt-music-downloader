@@ -54,8 +54,7 @@ def download_audio_mp3(video_url):
     'quiet': True,
     'noplaylist': True,
     'noprogress': True,
-    'geo_bypass':True,
-    'extractor_args':{'youtube':['client=ios,tv,mweb']},
+    'cookiesfile': cookies.txt,
 
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
