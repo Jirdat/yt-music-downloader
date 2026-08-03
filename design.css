@@ -1,0 +1,97 @@
+
+
+#you-tube-lunjir-downloader{
+    color: red;
+    font-size: 19px;
+    white-space: nowrap;
+    display: flex;
+    justify-content: center;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.st-emotion-cache-18kf3ut.e1rw0b1u4{
+    background-color: rgb(235, 231, 231);
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4{
+    padding-top: 30px;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.st-emotion-cache-18kf3ut.e1rw0b1u4 > div > div > div.stElementContainer.element-container.st-key-FormSubmitter-search_form-Ritarlip.st-emotion-cache-zh2fnc.e1rw0b1u1 > div > div > button{
+    background-color: #1DB954;
+    color: white;
+    transition: 200ms;
+}
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.st-emotion-cache-18kf3ut.e1rw0b1u4 > div > div > div.stElementContainer.element-container.st-key-FormSubmitter-search_form-Ritarlip.st-emotion-cache-zh2fnc.e1rw0b1u1 > div > div > button:hover{
+    background-color: rgb(16, 141, 16);
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.st-emotion-cache-18kf3ut.e1rw0b1u4 > div > div > div.stElementContainer.element-container.st-key-FormSubmitter-search_form-Ritarlip.st-emotion-cache-zh2fnc.e1rw0b1u1{
+    width: 100%;
+}
+
+#chongvai-ik-non-aber{
+    font-size: 15px;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.stElementContainer.element-container.st-emotion-cache-zh2fnc.e1rw0b1u1 > div > button{
+    background-color: #1DB954;
+    color: white;
+    font-weight: 700;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.stElementContainer.element-container.st-emotion-cache-zh2fnc.e1rw0b1u1{
+    width: 100%;
+}
+
+/* Make standard buttons (like Convert to MP3 and Search) Green */
+.stButton > button {
+    background-color: #1DB954 !important; /* Spotify Green */
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    font-weight: bold !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+/* Make it glow slightly when you hover your mouse over it */
+.stButton > button:hover {
+    background-color: #1ed760 !important; 
+    color: white !important;
+    transform: scale(1.02) !important; /* Makes it pop out slightly */
+}
+
+.developer{
+    position: fixed;
+    bottom: 2vh;
+    left: 1vh;
+    font-size: 11px;
+    z-index: 1000;
+    font-style: italic;
+}
+
+div[data-testid="stVerticalBlock"]>div{
+    margin-bottom: 0rem;
+    padding-bottom: 0rem;
+}
+#root > div > div > div > div > div > header{
+    display: none;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div:nth-child(3){
+    height: 40px;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.follow{
+    position: static;
+    background-color: rgb(209, 55, 240);
+    font-size: 10px;
+    border-radius: 6px;
+    border: none;
+    padding: 6px 10px;
+    color: white;
+    cursor: pointer;
+}
