@@ -2,6 +2,7 @@ import streamlit as st
 import yt_dlp
 import os
 import tempfile
+import requests
 
 st.set_page_config(page_title="YT Lunjir Downloader", page_icon="🎵", layout="centered")
 
@@ -46,38 +47,41 @@ def search_youtube(query, max_results=5):
             st.error(f"Lonle, Internet connect tha: {e}")
             return []
 
-def download_audio_mp3(video_url):
-    temp_dir = tempfile.mkdtemp()
-    ydl_opts = {
-        # Broad format request prioritizing m4a and standard audio
-        'format': 'bestaudio/best', 
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-        'outtmpl': os.path.join(temp_dir, 'audio.%(ext)s'), 
-        'quiet': True,
-        'noprogress': True,
-        'noplaylist': True, 
-        'cookiefile': 'cookies.txt', 
-        
-        # --- THE FIX: DISGUISE AS AN ANDROID DEVICE ---
-        'extractor_args': {'youtube': ['client=android,ios,tv,mweb']},
+
+def download_audio_api(video_url):
+    # The public Cobalt API endpoint
+    api_url = "https://api.cobalt.tools/api/json"
+    
+    # Cobalt strictly requires these headers for POST requests
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
     }
     
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        try:
-            ydl.extract_info(video_url, download=True)
-            file_path = os.path.join(temp_dir, "audio.mp3")
+    # The payload configuring the exact audio file we want
+    payload = {
+        "url": video_url,
+        "isAudioOnly": True,
+        "aFormat": "mp3" 
+    }
+    
+    try:
+        # Send the request to Cobalt's servers
+        response = requests.post(api_url, headers=headers, json=payload)
+        
+        # Parse the JSON response
+        data = response.json()
+        
+        # Cobalt will return a status of 'stream' or 'redirect' upon success
+        if data.get("status") in ["stream", "redirect"]:
+            # Return the direct download link provided by the API
+            return data.get("url"), None
+        else:
+            return None, "API blocked the request or the video is unavailable."
             
-            if os.path.exists(file_path):
-                return file_path, None
-            else:
-                return None, "File not found after conversion. Make sure FFmpeg is installed correctly."
-        except Exception as e:
-            return None, str(e)
-            
+    except Exception as e:
+        return None, f"Network Error: {str(e)}"
+        
 
 # --- 4. UI: Search Bar ---
 with st.form("search_form"):
