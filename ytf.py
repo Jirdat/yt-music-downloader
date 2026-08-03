@@ -60,19 +60,18 @@ ydl_opts = {
         'preferredquality': '192',
     }]
 }
-    
 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
     try:
         ydl.extract_info(video_url, download=True)
         file_path = os.path.join(temp_dir, "audio.mp3")
-            
+
         if os.path.exists(file_path):
             return file_path, None
         else:
             return None, "File not found after conversion. Make sure FFmpeg is installed correctly."
+
     except Exception as e:
         return None, str(e)
-
 # --- 4. UI: Search Bar ---
 with st.form("search_form"):
     search_query = st.text_input("Lunjir amen tok ik non:")
