@@ -46,17 +46,13 @@ def search_youtube(query, max_results=5):
             st.error(f"Lonle, Internet connect tha: {e}")
             return []
 
-def download_audio_mp3(video_url):
-    temp_dir = tempfile.mkdtemp()
-    ydl_opts = {
-    'format':'bestaudio/best',
+ydl_opts = {
+    'format': 'bestaudio/best',
     'outtmpl': os.path.join(temp_dir, 'audio.%(ext)s'),
     'quiet': True,
     'noplaylist': True,
     'noprogress': True,
     'cookiefile': 'cookies.txt',
-     #'geo_bypass':True,
-     #'source_address': '0.0.0.0',
 
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
