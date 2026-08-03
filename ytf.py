@@ -46,32 +46,39 @@ def search_youtube(query, max_results=5):
             st.error(f"Lonle, Internet connect tha: {e}")
             return []
 
-ydl_opts = {
-    'format': 'bestaudio/best',
-    'outtmpl': os.path.join(temp_dir, 'audio.%(ext)s'),
-    'quiet': True,
-    'noplaylist': True,
-    'noprogress': True,
-    'cookiefile': 'cookies.txt',
+def download_audio_mp3(video_url):
+    temp_dir = tempfile.mkdtemp()
+    ydl_opts = {
+        # Broad format request prioritizing m4a and standard audio
+        'format': 'm4a/bestaudio/best', 
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'outtmpl': os.path.join(temp_dir, 'audio.%(ext)s'), 
+        'quiet': True,
+        'noprogress': True,
+        'noplaylist': True, 
+        'cookiefile': 'cookies.txt', 
+        
+        # --- THE FIX: DISGUISE AS AN ANDROID DEVICE ---
+        'extractor_args': {'youtube': ['client=android,ios,tv,mweb']},
+    }
+    
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        try:
+            ydl.extract_info(video_url, download=True)
+            file_path = os.path.join(temp_dir, "audio.mp3")
+            
+            if os.path.exists(file_path):
+                return file_path, None
+            else:
+                return None, "File not found after conversion. Make sure FFmpeg is installed correctly."
+        except Exception as e:
+            return None, str(e)
+            
 
-    'postprocessors': [{
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'mp3',
-        'preferredquality': '192',
-    }]
-}
-with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    try:
-        ydl.extract_info(video_url, download=True)
-        file_path = os.path.join(temp_dir, "audio.mp3")
-
-        if os.path.exists(file_path):
-            return file_path, None
-        else:
-            return None, "File not found after conversion. Make sure FFmpeg is installed correctly."
-
-    except Exception as e:
-        return None, str(e)
 # --- 4. UI: Search Bar ---
 with st.form("search_form"):
     search_query = st.text_input("Lunjir amen tok ik non:")
