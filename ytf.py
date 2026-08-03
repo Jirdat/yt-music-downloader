@@ -50,7 +50,7 @@ def download_audio_mp3(video_url):
     temp_dir = tempfile.mkdtemp()
     ydl_opts = {
         # Broad format request prioritizing m4a and standard audio
-        'format': 'm4a/bestaudio/best', 
+        'format': 'bestaudio/best', 
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
