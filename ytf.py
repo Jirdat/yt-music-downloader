@@ -55,6 +55,8 @@ def download_audio_mp3(video_url):
     'noplaylist': True,
     'noprogress': True,
     'cookiesfile': 'cookies.txt',
+    'geo_bypass':True,
+    'source_address': '0.0.0.0',
 
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
