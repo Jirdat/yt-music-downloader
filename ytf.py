@@ -54,7 +54,7 @@ def download_audio_mp3(video_url):
     'quiet': True,
     'noplaylist': True,
     'noprogress': True,
-    'cookiesfile': cookies.txt,
+    'cookiesfile': 'cookies.txt',
 
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
