@@ -14,7 +14,7 @@ def local_css(file_name):
         pass # Silently pass if CSS is missing so it doesn't break the app
 
 st.markdown("""<div style="position: static; text-align: right; margin-bottom: 1px"><a href="https://www.instagram.com/jirdat_timung?igsh=MWFlaG15Y2t4Zjlyaw==" target="_blank"><button class="follow">Follow Us</button></a></div>""", unsafe_allow_html=True)
-local_css(".venv/design.css")
+local_css("design.css")
 
 st.title("🎵 YouTube Lunjir Downloader")
 
