@@ -49,7 +49,7 @@ def search_youtube(query, max_results=5):
 def download_audio_mp3(video_url):
     temp_dir = tempfile.mkdtemp()
     ydl_opts = {
-    
+    'format':'bestaudio/best',
     'outtmpl': os.path.join(temp_dir, 'audio.%(ext)s'),
     'quiet': True,
     'noplaylist': True,
