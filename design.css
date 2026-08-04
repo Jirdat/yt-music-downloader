@@ -59,4 +59,10 @@
 #root > div > div > div > div > div > header{
     display:none;
 }
+#root > div:nth-child(1) > div > div > button{
+    display: none;
+}
+
+#you-tube-lunjir-downloader{
+    font-size: 15px;
 
