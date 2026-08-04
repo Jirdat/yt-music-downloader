@@ -11,52 +11,47 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- 2. Backend: Cobalt API for Downloading ---
-def download_audio_api(video_url):
-    api_url = "https://api.cobalt.tools/"
+# --- 2. Backend: RapidAPI for Downloading ---
+def download_audio_api(video_id):
+    try:
+        rapid_key = st.secrets["RAPID_API_KEY"]
+    except KeyError:
+        return None, "RapidAPI Key missing! Please add RAPID_API_KEY to Streamlit Secrets."
+
+    # The specific RapidAPI endpoint for YouTube MP3 conversion
+    url = "https://youtube-mp36.p.rapidapi.com/dl"
     
-    # We are disguising the Python script as a real Windows/Chrome web browser
+    # We pass the video ID to the API
+    querystring = {"id": video_id}
+    
     headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
-        "Origin": "https://cobalt.tools",
-        "Referer": "https://cobalt.tools/"
-    }
-    
-    payload = {
-        "url": video_url,
-        "downloadMode": "audio",
-        "audioFormat": "mp3" 
+        "x-rapidapi-key": rapid_key,
+        "x-rapidapi-host": "youtube-mp36.p.rapidapi.com"
     }
     
     try:
-        response = requests.post(api_url, headers=headers, json=payload)
+        response = requests.get(url, headers=headers, params=querystring)
         data = response.json()
         
-        if data.get("status") in ["stream", "redirect", "tunnel"]:
-            return data.get("url"), None
-        elif data.get("status") == "error":
-             # Cobalt v7 hides the real error reason inside a nested dictionary
-             error_details = data.get("error", {})
-             error_code = error_details.get("code", "Unknown Code")
-             return None, f"Cobalt refused the download. Reason: {error_code}"
+        # This specific API returns the download URL under the "link" key
+        if data.get("link"):
+            return data.get("link"), None
+        elif data.get("message"):
+            return None, f"API Error: {data.get('message')}"
         else:
-            return None, "API blocked the request completely."
+            return None, "Failed to generate download link."
+            
     except Exception as e:
         return None, f"Network Error: {str(e)}"
-        
 
 # --- 3. Backend: Official YouTube API for Searching ---
 def search_youtube_official(query):
-    # Grab the secret key from Streamlit Cloud
     try:
         api_key = st.secrets["YOUTUBE_API_KEY"]
     except KeyError:
         st.error("API Key missing! Please add YOUTUBE_API_KEY to Streamlit Secrets.")
         return []
 
-    # The official Google REST API endpoint
     url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&type=video&maxResults=5&key={api_key}"
     
     try:
@@ -95,8 +90,6 @@ if "search_results" in st.session_state:
     st.write("### Search Results:")
     
     for idx, video in enumerate(st.session_state.search_results):
-        full_url = f"https://www.youtube.com/watch?v={video['video_id']}"
-        
         col1, col2 = st.columns([1, 2])
         
         with col1:
@@ -107,8 +100,9 @@ if "search_results" in st.session_state:
             st.write(f"Channel: {video['channel']}")
             
             if st.button(f"Convert to MP3", key=f"convert_{idx}"):
-                with st.spinner("Converting on Cobalt servers..."):
-                    audio_link, error_msg = download_audio_api(full_url)
+                with st.spinner("Authorizing and converting via RapidAPI..."):
+                    # We only pass the video_id now, not the full URL
+                    audio_link, error_msg = download_audio_api(video['video_id'])
                     
                     if audio_link:
                         st.success("✅ Conversion Complete!")
