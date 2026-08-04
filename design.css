@@ -39,3 +39,22 @@
     color: white;
     transform: scale(1.05);
 }
+/* 6. Link Buttons (Download MP3) */
+.stLinkButton > a {
+    background-color: #28a745; /* Green color to indicate a successful download */
+    color: white;
+    border-radius: 10px;
+    border: none;
+    font-weight: bold;
+    text-decoration: none; 
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect for the link button */
+.stLinkButton > a:hover {
+    background-color: #218838;
+    color: white;
+    transform: scale(1.05);
+}
+
