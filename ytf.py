@@ -14,10 +14,16 @@ st.markdown("""
 # --- 2. Backend: Cobalt API for Downloading ---
 def download_audio_api(video_url):
     api_url = "https://api.cobalt.tools/"
+    
+    # We are disguising the Python script as a real Windows/Chrome web browser
     headers = {
         "Accept": "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        "Origin": "https://cobalt.tools",
+        "Referer": "https://cobalt.tools/"
     }
+    
     payload = {
         "url": video_url,
         "downloadMode": "audio",
@@ -31,11 +37,15 @@ def download_audio_api(video_url):
         if data.get("status") in ["stream", "redirect", "tunnel"]:
             return data.get("url"), None
         elif data.get("status") == "error":
-             return None, data.get("text", "API error occurred.")
+             # Cobalt v7 hides the real error reason inside a nested dictionary
+             error_details = data.get("error", {})
+             error_code = error_details.get("code", "Unknown Code")
+             return None, f"Cobalt refused the download. Reason: {error_code}"
         else:
-            return None, "API blocked the request."
+            return None, "API blocked the request completely."
     except Exception as e:
         return None, f"Network Error: {str(e)}"
+        
 
 # --- 3. Backend: Official YouTube API for Searching ---
 def search_youtube_official(query):
