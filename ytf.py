@@ -12,7 +12,7 @@ def local_css(file_name):
 # Load your custom style.css file
 local_css("design.css")
 
-st.markdown("""<button style='border: solid black; padding:10px; border-radius: 6px; background-color: pink'><a href="" style='font-size:12px; text-decoration: none; color: white'>Follow Us</a></button>""", unsafe_allow_html=True)
+st.markdown("""<button style='border: solid black; padding:4px 7px; border-radius: 6px; background-color: pink'><a href="" style='font-size:10px; text-decoration: none; color: white'>Follow Us</a></button>""", unsafe_allow_html=True)
 
 # --- 2. Backend: RapidAPI for Downloading ---
 def download_audio_api(video_id):
