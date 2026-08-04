@@ -2,8 +2,6 @@
 
 /* 1. Main Background */
 .stApp {
-    background-color: #121212; /* Dark mode background */
-    color: #ffffff;
 }
 
 /* 2. The Main Header */
@@ -57,5 +55,9 @@
     background-color: #218838;
     color: white;
     transform: scale(1.05);
+}
+
+#root > div > div > div > div > div > header{
+    display:none;
 }
 
