@@ -4,12 +4,14 @@ import requests
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="YouTube Lunjir Downloader", page_icon="🎵")
 
-st.markdown("""
-<style>
-    .stApp { background-color: #f8f9fa; }
-    .main-header { text-align: center; color: #ff0000; font-weight: bold; margin-bottom: 2rem; }
-</style>
-""", unsafe_allow_html=True)
+# Function to load external CSS
+def local_css(file_name):
+    with open(file_name) as f:
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+
+# Load your custom style.css file
+local_css("design.css")
+
 
 # --- 2. Backend: RapidAPI for Downloading ---
 def download_audio_api(video_id):
