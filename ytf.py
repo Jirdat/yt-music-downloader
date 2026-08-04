@@ -1,6 +1,5 @@
 import streamlit as st
 import requests
-from ytmusicapi import YTMusic
 
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="YouTube Lunjir Downloader", page_icon="🎵")
@@ -12,10 +11,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Initialize the YouTube Music API (Synchronous and fast)
-ytmusic = YTMusic()
-
-# --- 2. Backend: Cobalt API Logic ---
+# --- 2. Backend: Cobalt API for Downloading ---
 def download_audio_api(video_url):
     api_url = "https://api.cobalt.tools/"
     headers = {
@@ -41,57 +37,57 @@ def download_audio_api(video_url):
     except Exception as e:
         return None, f"Network Error: {str(e)}"
 
-# --- 3. UI: Header & Search Bar ---
+# --- 3. Backend: Piped API for Searching ---
+def search_youtube(query):
+    # This queries an open-source proxy server instead of YouTube directly
+    search_url = f"https://pipedapi.kavin.rocks/search?q={query}&filter=all"
+    
+    try:
+        response = requests.get(search_url, timeout=10)
+        if response.status_code == 200:
+            data = response.json()
+            # Filter out channels/playlists, keep only video streams, return top 5
+            videos = [item for item in data.get("items", []) if item.get("type") == "stream"]
+            return videos[:5]
+        return []
+    except Exception:
+        return []
+
+# --- 4. UI: Header & Search Bar ---
 st.markdown("<h2 class='main-header'>🎵 YouTube Lunjir Downloader</h2>", unsafe_allow_html=True)
 
 search_query = st.text_input("Lunjir amen tok ik non (Enter song name or link):", placeholder="e.g., Main hoon saath tere")
 
 if st.button("Search"):
     if search_query:
-        with st.spinner("Searching YouTube Music..."):
-            try:
-                # Search strictly for songs using ytmusicapi
-                search_results = ytmusic.search(search_query, filter="songs", limit=5)
-                
-                if search_results:
-                    st.session_state.search_results = search_results
-                else:
-                    st.warning("No results found.")
-            except Exception as e:
-                st.error(f"Search failed: {str(e)}")
+        with st.spinner("Searching via proxy API..."):
+            search_results = search_youtube(search_query)
+            
+            if search_results:
+                st.session_state.search_results = search_results
+            else:
+                st.warning("No results found. Please try a different search term.")
 
-# --- 4. UI: Display Search Results ---
+# --- 5. UI: Display Search Results ---
 if "search_results" in st.session_state:
     st.write("### Search Results:")
     
     for idx, video in enumerate(st.session_state.search_results):
-        # ytmusicapi uses 'videoId' instead of 'link'
-        video_id = video.get('videoId')
-        if not video_id:
+        # Piped API returns URLs like '/watch?v=...'
+        short_url = video.get('url', '')
+        if not short_url:
             continue
             
-        # Reconstruct the standard YouTube URL for Cobalt
-        full_url = f"https://www.youtube.com/watch?v={video_id}"
+        full_url = f"https://www.youtube.com{short_url}"
         
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            # Grab the highest resolution thumbnail available
-            thumbnail_url = video['thumbnails'][-1]['url']
-            st.image(thumbnail_url, use_container_width=True)
+            st.image(video.get('thumbnail', ''), use_container_width=True)
             
         with col2:
-            title = video.get('title', 'Unknown Title')
-            
-            # Safely extract the artist name
-            artist = "Unknown Artist"
-            if video.get('artists') and len(video['artists']) > 0:
-                artist = video['artists'][0].get('name', 'Unknown Artist')
-                
-            duration = video.get('duration', 'Unknown')
-            
-            st.write(f"**{title}**")
-            st.write(f"Artist: {artist} | Duration: {duration}")
+            st.write(f"**{video.get('title', 'Unknown Title')}**")
+            st.write(f"Channel: {video.get('uploaderName', 'Unknown')} | Duration: {video.get('duration', 0)} seconds")
             
             if st.button(f"Convert to MP3", key=f"convert_{idx}"):
                 with st.spinner("Converting on Cobalt servers..."):
@@ -104,3 +100,4 @@ if "search_results" in st.session_state:
                         st.error(f"Error: {error_msg}")
         
         st.markdown("---")
+        
