@@ -91,3 +91,6 @@
 #root > div:nth-child(1) > div > div > button{
     display:none;
 }
+#search-results{
+    font-size: 12px;
+}
