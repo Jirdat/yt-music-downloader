@@ -20,6 +20,7 @@
     background-color: #1DB954;
     color: white;
     transition: 200ms;
+    border: solid red;
 }
 #root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.st-emotion-cache-18kf3ut.e1rw0b1u4 > div > div > div.stElementContainer.element-container.st-key-FormSubmitter-search_form-Ritarlip.st-emotion-cache-zh2fnc.e1rw0b1u1 > div > div > button:hover{
     background-color: rgb(16, 141, 16);
