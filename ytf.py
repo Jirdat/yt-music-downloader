@@ -75,7 +75,7 @@ def search_youtube_official(query):
 # --- 4. UI: Header & Search Bar ---
 st.markdown("<h2 class='main-header'>🎵 YouTube Lunjir Downloader</h2>", unsafe_allow_html=True)
 
-search_query = st.text_input("Lunjir amen tok ik non (Enter song name):", placeholder="e.g., Main hoon saath tere")
+search_query = st.text_input("Lunjir amen tok ik non:", placeholder="e.g., New karbi song")
 
 if st.button("Search"):
     if search_query:
@@ -108,9 +108,11 @@ if "search_results" in st.session_state:
                     
                     if audio_link:
                         st.success("✅ Conversion Complete!")
-                        st.markdown(f"### [➡️ Click Here to Download MP3]({audio_link})")
+                        # This creates a native button that links to the MP3 URL!
+                        st.link_button("➡️ Download MP3", audio_link)
                     else:
                         st.error(f"Error: {error_msg}")
+                        
         
         st.markdown("---")
         
