@@ -12,7 +12,7 @@ def local_css(file_name):
 # Load your custom style.css file
 local_css("design.css")
 
-st.markdown("""<div class='follow'>Follow Us</div>""", unsafe_allow_html=True)
+st.markdown("""<button style='border: solid black; padding:10px 15px'><a href="">Follow Us</a></button>""", unsafe_allow_html=True)
 
 # --- 2. Backend: RapidAPI for Downloading ---
 def download_audio_api(video_id):
