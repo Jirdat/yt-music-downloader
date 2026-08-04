@@ -64,7 +64,7 @@
 }
 
 #you-tube-lunjir-downloader{
-    font-size: 15px;
+    font-size: 20px;
 }
 
 #root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4{
@@ -82,4 +82,8 @@
     padding: 2px 8px
     height:22px;
     border-radius: 7px;
+}
+
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div.stElementContainer.element-container.st-emotion-cache-zh2fnc.elzidro1{
+    width: 100%
 }
