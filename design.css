@@ -31,6 +31,7 @@
     border: none;
     font-weight: bold;
     transition: all 0.3s ease;
+    width: 100%;
 }
 
 /* 5. Button Hover Effect */
