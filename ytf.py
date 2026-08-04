@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
-from youtubesearchpython import VideosSearch
+import asyncio
+from py_yt import VideosSearch
 
 # --- 1. Page Configuration ---
 st.set_page_config(page_title="YouTube Lunjir Downloader", page_icon="🎵")
@@ -38,7 +39,15 @@ def download_audio_api(video_url):
     except Exception as e:
         return None, f"Network Error: {str(e)}"
 
-# --- 3. UI: Header & Search Bar ---
+# --- 3. Backend: Async Search Function ---
+async def perform_search(query):
+    # Initialize the search for 5 videos using the py-yt-search library
+    videosSearch = VideosSearch(query, limit=5, language='en', region='US')
+    # Fetch the results asynchronously
+    result = await videosSearch.next()
+    return result.get('result', [])
+
+# --- 4. UI: Header & Search Bar ---
 st.markdown("<h2 class='main-header'>🎵 YouTube Lunjir Downloader</h2>", unsafe_allow_html=True)
 
 search_query = st.text_input("Lunjir amen tok ik non (Enter song name or link):", placeholder="e.g., Main hoon saath tere")
@@ -47,39 +56,38 @@ if st.button("Search"):
     if search_query:
         with st.spinner("Searching YouTube..."):
             try:
-                # Fetch the top 5 results for the search term
-                videosSearch = VideosSearch(search_query, limit=5)
-                st.session_state.search_results = videosSearch.result()['result']
+                # Use asyncio.run to execute the async search function
+                search_results = asyncio.run(perform_search(search_query))
+                
+                if search_results:
+                    st.session_state.search_results = search_results
+                else:
+                    st.warning("No results found or search was blocked.")
             except Exception as e:
-                st.error("Search failed. Please try again.")
+                st.error(f"Search failed: {str(e)}")
 
-# --- 4. UI: Display Search Results ---
+# --- 5. UI: Display Search Results ---
 if "search_results" in st.session_state:
     st.write("### Search Results:")
     
     for idx, video in enumerate(st.session_state.search_results):
-        # Create two columns: one for the thumbnail, one for the title/button
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            # Display the video thumbnail
             st.image(video['thumbnails'][0]['url'], use_container_width=True)
             
         with col2:
-            # Display title and channel
             st.write(f"**{video['title']}**")
             st.write(f"Channel: {video['channel']['name']} | Duration: {video['duration']}")
             
-            # Unique button for every video in the list
             if st.button(f"Convert to MP3", key=f"convert_{idx}"):
                 with st.spinner("Converting on Cobalt servers..."):
                     audio_link, error_msg = download_audio_api(video['link'])
                     
                     if audio_link:
                         st.success("✅ Conversion Complete!")
-                        # Provide a direct clickable link to download the file
                         st.markdown(f"### [➡️ Click Here to Download MP3]({audio_link})")
                     else:
                         st.error(f"Error: {error_msg}")
         
-        st.markdown("---") # Add a dividing line between videos
+        st.markdown("---")
