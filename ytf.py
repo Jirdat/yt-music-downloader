@@ -80,7 +80,7 @@ search_query = st.text_input("Lunjir amen tok ik non:", placeholder="e.g., New k
 
 if st.button("Search"):
     if search_query:
-        with st.spinner("Searching official YouTube database..."):
+        with st.spinner("Ritarlip voi lang..."):
             search_results = search_youtube_official(search_query)
             
             if search_results:
@@ -90,7 +90,7 @@ if st.button("Search"):
 
 # --- 5. UI: Display Search Results ---
 if "search_results" in st.session_state:
-    st.write("### Search Results:")
+    st.write("### Aber chongvai ik non:")
     
     for idx, video in enumerate(st.session_state.search_results):
         col1, col2 = st.columns([1, 2])
@@ -103,12 +103,12 @@ if "search_results" in st.session_state:
             st.write(f"Channel: {video['channel']}")
             
             if st.button(f"Convert to MP3", key=f"convert_{idx}"):
-                with st.spinner("Authorizing and converting via RapidAPI..."):
+                with st.spinner("Malomso inghong ik tha..."):
                     # We only pass the video_id now, not the full URL
                     audio_link, error_msg = download_audio_api(video['video_id'])
                     
                     if audio_link:
-                        st.success("✅ Conversion Complete!")
+                        st.success("✅ Convert etlo!")
                         # This creates a native button that links to the MP3 URL!
                         st.link_button("➡️ Download MP3", audio_link)
                     else:
