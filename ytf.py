@@ -31,63 +31,70 @@ def download_audio_api(video_url):
         if data.get("status") in ["stream", "redirect", "tunnel"]:
             return data.get("url"), None
         elif data.get("status") == "error":
-             return None, data.get("text", "Unknown API error occurred.")
+             return None, data.get("text", "API error occurred.")
         else:
             return None, "API blocked the request."
     except Exception as e:
         return None, f"Network Error: {str(e)}"
 
-# --- 3. Backend: Piped API for Searching ---
-def search_youtube(query):
-    # This queries an open-source proxy server instead of YouTube directly
-    search_url = f"https://pipedapi.kavin.rocks/search?q={query}&filter=all"
+# --- 3. Backend: Official YouTube API for Searching ---
+def search_youtube_official(query):
+    # Grab the secret key from Streamlit Cloud
+    try:
+        api_key = st.secrets["YOUTUBE_API_KEY"]
+    except KeyError:
+        st.error("API Key missing! Please add YOUTUBE_API_KEY to Streamlit Secrets.")
+        return []
+
+    # The official Google REST API endpoint
+    url = f"https://www.googleapis.com/youtube/v3/search?part=snippet&q={query}&type=video&maxResults=5&key={api_key}"
     
     try:
-        response = requests.get(search_url, timeout=10)
-        if response.status_code == 200:
-            data = response.json()
-            # Filter out channels/playlists, keep only video streams, return top 5
-            videos = [item for item in data.get("items", []) if item.get("type") == "stream"]
-            return videos[:5]
-        return []
+        response = requests.get(url)
+        data = response.json()
+        
+        videos = []
+        for item in data.get('items', []):
+            videos.append({
+                'title': item['snippet']['title'],
+                'channel': item['snippet']['channelTitle'],
+                'video_id': item['id']['videoId'],
+                'thumbnail': item['snippet']['thumbnails']['high']['url']
+            })
+        return videos
     except Exception:
         return []
 
 # --- 4. UI: Header & Search Bar ---
 st.markdown("<h2 class='main-header'>🎵 YouTube Lunjir Downloader</h2>", unsafe_allow_html=True)
 
-search_query = st.text_input("Lunjir amen tok ik non (Enter song name or link):", placeholder="e.g., Main hoon saath tere")
+search_query = st.text_input("Lunjir amen tok ik non (Enter song name):", placeholder="e.g., Main hoon saath tere")
 
 if st.button("Search"):
     if search_query:
-        with st.spinner("Searching via proxy API..."):
-            search_results = search_youtube(search_query)
+        with st.spinner("Searching official YouTube database..."):
+            search_results = search_youtube_official(search_query)
             
             if search_results:
                 st.session_state.search_results = search_results
             else:
-                st.warning("No results found. Please try a different search term.")
+                st.warning("No results found or API limit reached.")
 
 # --- 5. UI: Display Search Results ---
 if "search_results" in st.session_state:
     st.write("### Search Results:")
     
     for idx, video in enumerate(st.session_state.search_results):
-        # Piped API returns URLs like '/watch?v=...'
-        short_url = video.get('url', '')
-        if not short_url:
-            continue
-            
-        full_url = f"https://www.youtube.com{short_url}"
+        full_url = f"https://www.youtube.com/watch?v={video['video_id']}"
         
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            st.image(video.get('thumbnail', ''), use_container_width=True)
+            st.image(video['thumbnail'], use_container_width=True)
             
         with col2:
-            st.write(f"**{video.get('title', 'Unknown Title')}**")
-            st.write(f"Channel: {video.get('uploaderName', 'Unknown')} | Duration: {video.get('duration', 0)} seconds")
+            st.write(f"**{video['title']}**")
+            st.write(f"Channel: {video['channel']}")
             
             if st.button(f"Convert to MP3", key=f"convert_{idx}"):
                 with st.spinner("Converting on Cobalt servers..."):
