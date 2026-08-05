@@ -89,3 +89,29 @@
     align-item: center;
     justify-content:center;
 }
+/* --- 7. Completely Hide ALL Streamlit Branding --- */
+
+/* Hide the main footer */
+footer {
+    visibility: hidden !important;
+}
+
+/* Hide the top right GitHub/Menu toolbar */
+[data-testid="stToolbar"] {
+    display: none !important;
+}
+
+/* Hide the top decoration line and header */
+[data-testid="stHeader"] {
+    display: none !important;
+}
+
+/* Hide the floating 'Hosted with Streamlit' badge */
+[data-testid="viewerBadge"] {
+    display: none !important;
+}
+
+/* Failsafe: Hide any link that points to Streamlit Cloud */
+a[href^="https://streamlit.io/cloud"] {
+    display: none !important;
+}
