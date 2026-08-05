@@ -89,29 +89,39 @@
     align-item: center;
     justify-content:center;
 }
-/* --- 7. Completely Hide ALL Streamlit Branding --- */
+/* --- 7. Completely Hide ALL Streamlit Branding (Nuclear Option) --- */
 
-/* Hide the main footer */
-footer {
-    visibility: hidden !important;
-}
-
-/* Hide the top right GitHub/Menu toolbar */
-[data-testid="stToolbar"] {
+/* Hide the standard footer */
+footer { 
+    visibility: hidden !important; 
     display: none !important;
 }
 
-/* Hide the top decoration line and header */
-[data-testid="stHeader"] {
+/* Hide the top header and menu */
+header { 
+    visibility: hidden !important; 
     display: none !important;
 }
-
-/* Hide the floating 'Hosted with Streamlit' badge */
-[data-testid="viewerBadge"] {
+#MainMenu { 
+    visibility: hidden !important; 
     display: none !important;
 }
+[data-testid="stHeader"] { 
+    display: none !important; 
+}
+[data-testid="stToolbar"] { 
+    display: none !important; 
+}
 
-/* Failsafe: Hide any link that points to Streamlit Cloud */
-a[href^="https://streamlit.io/cloud"] {
-    display: none !important;
+/* 
+   Hide the floating 'Hosted by Streamlit' badge.
+   Using the wildcard (*) targets Streamlit's randomized cloud classes.
+*/
+div[class*="viewerBadge"] { 
+    display: none !important; 
+}
+
+/* Hide the manage app button via wildcard */
+div[class*="manageApp"] { 
+    display: none !important; 
 }
