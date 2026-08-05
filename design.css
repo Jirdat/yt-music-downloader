@@ -89,39 +89,26 @@
     align-item: center;
     justify-content:center;
 }
-/* --- 7. Completely Hide ALL Streamlit Branding (Nuclear Option) --- */
+/* --- 7. Completely Hide ALL Streamlit Branding (Targeted Fix) --- */
 
-/* Hide the standard footer */
-footer { 
+/* Hide the standard footer, header, and menu */
+footer, header, #MainMenu { 
     visibility: hidden !important; 
-    display: none !important;
-}
-
-/* Hide the top header and menu */
-header { 
-    visibility: hidden !important; 
-    display: none !important;
-}
-#MainMenu { 
-    visibility: hidden !important; 
-    display: none !important;
-}
-[data-testid="stHeader"] { 
     display: none !important; 
 }
-[data-testid="stToolbar"] { 
+[data-testid="stHeader"], [data-testid="stToolbar"] { 
     display: none !important; 
 }
 
 /* 
-   Hide the floating 'Hosted by Streamlit' badge.
-   Using the wildcard (*) targets Streamlit's randomized cloud classes.
+   Target the exact Viewer Badge classes, and use a universal wildcard 
+   to catch any element containing "viewerBadge" or "manageApp" 
 */
-div[class*="viewerBadge"] { 
-    display: none !important; 
-}
-
-/* Hide the manage app button via wildcard */
-div[class*="manageApp"] { 
+.viewerBadge_container__1QSob, 
+.styles_viewerBadge__1yB5_, 
+.viewerBadge_link__1S137, 
+.viewerBadge_text__1JaDK,
+[class*="viewerBadge"], 
+[class*="manageApp"] { 
     display: none !important; 
 }
