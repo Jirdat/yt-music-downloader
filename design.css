@@ -84,3 +84,8 @@
 #aber-chongvai-ik-non{
     font-size: 12px;
 }
+#root > div > div > div > div > div > section > div.stMainBlockContainer.block-container.st-emotion-cache-1w723zb.e15ve43o4 > div > div:nth-child(2) > div > div > div > p > button{
+    display:flex;
+    align-item: center;
+    justify-content:center;
+}
